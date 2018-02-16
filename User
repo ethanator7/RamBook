@@ -90,6 +90,10 @@ public class User
         return friendsList.size();
     }
     
+    public ArrayList<User> getFriends() {
+        return friendsList;
+    }
+    
     public ArrayList<User> getMutualFriends(User other) {
         ArrayList<User> mutuals = new ArrayList<User>();
         
