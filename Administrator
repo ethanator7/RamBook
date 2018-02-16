@@ -1,0 +1,16 @@
+public class Administrator {
+    
+    private String name;
+    private int id;
+    
+    public Administrator(String n, int identification) {
+        name = n;
+        id = identification;
+    }
+    
+    public void removeUser(String name) {
+        
+    }
+    
+    
+}
