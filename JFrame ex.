@@ -1,0 +1,385 @@
+import java.lang.Object.*;
+import javax.swing.*;
+import javax.swing.JOptionPane;
+import javax.swing.JComponent.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class Calculator extends JFrame implements ActionListener, KeyListener
+{
+
+    //Create the frame.
+    private JFrame frame;
+
+    //Input textbox 1
+    private JTextField input1;
+
+    //Input textbox 2
+    private JTextField input2;
+
+    //Where the answer is displayed
+    private JTextField answerField;
+
+    //Addition Button
+    private JButton addBtn;
+
+    //Subtraction Button
+    private JButton subtractBtn;
+
+    //Multiplication Button
+    private JButton multiplyBtn;
+
+    //Division Button
+    private JButton divideBtn;
+    
+    private JButton modBtn;
+
+    //Clear All Button
+    private JButton clearAllBtn;
+    
+    private JButton piBtn;
+    
+    private JButton expBtn;
+    
+    private JButton sinBtn;
+    private JButton cosBtn;
+    private JButton tanBtn;
+    //Labels
+    private JLabel label_Answer;
+    private JLabel label_input1;
+    private JLabel label_input2;
+
+    //DEFAULT CONSTRUCTOR
+    public Calculator()
+    {
+        frame = new JFrame();
+
+        input1 = new JTextField("", 15);
+        input2 = new JTextField("", 15);
+
+        label_Answer = new JLabel("ANSWER: ");
+        label_input1 = new JLabel("Input 1: ");
+        label_input2 = new JLabel("Input 2: ");
+
+        answerField = new JTextField("", 15);
+        answerField.setEnabled(false);
+
+        addBtn = new JButton("+");
+        subtractBtn = new JButton("-");
+        multiplyBtn = new JButton("x");
+        divideBtn = new JButton("/");
+        modBtn = new JButton("%");
+        expBtn = new JButton("^");
+        clearAllBtn = new JButton("Clear");
+        piBtn = new JButton("Pi");
+        sinBtn = new JButton("sin");
+        cosBtn = new JButton("cos");
+        tanBtn = new JButton("tan");
+
+        //Sets Background Color of Frame to Blue
+        frame.getContentPane().setBackground(Color.black);
+
+        frame.setLayout(null);
+
+        //Size the frame.
+        frame.pack();
+
+        //Sets size of window
+        frame.setSize(475, 500);
+
+        //Sets title of window
+        frame.setTitle("Calculator");
+
+        setLocationRelativeTo(null);
+
+        //Setting Color to Buttons
+        addBtn.setBackground(Color.lightGray);        
+        subtractBtn.setBackground(Color.lightGray);        
+        multiplyBtn.setBackground(Color.lightGray);        
+        divideBtn.setBackground(Color.lightGray);   
+        modBtn.setBackground(Color.lightGray);
+        expBtn.setBackground(Color.lightGray);
+        clearAllBtn.setBackground(Color.lightGray);
+        piBtn.setBackground(Color.lightGray);
+        sinBtn.setBackground(Color.lightGray);
+        cosBtn.setBackground(Color.lightGray);
+        tanBtn.setBackground(Color.lightGray);
+        //Adding Buttons to Window
+        frame.add(addBtn);
+        frame.add(subtractBtn);
+        frame.add(multiplyBtn);
+        frame.add(divideBtn);
+        frame.add(modBtn);
+        frame.add(clearAllBtn);
+        frame.add(piBtn);
+        frame.add(expBtn);
+        frame.add(label_Answer);
+        frame.add(label_input1);
+        frame.add(label_input2);
+        frame.add(sinBtn);
+        frame.add(cosBtn);
+        frame.add(tanBtn);
+
+        //Setting Button Size and Location
+        addBtn.setSize(50,50);
+        addBtn.setLocation(50, 187);
+
+        subtractBtn.setSize(50,50);
+        subtractBtn.setLocation(100, 187);
+
+        multiplyBtn.setSize(50,50);
+        multiplyBtn.setLocation(150, 187);
+
+        divideBtn.setSize(50,50);
+        divideBtn.setLocation(200, 187);
+        
+        modBtn.setSize(50,50);
+        modBtn.setLocation(250,187);
+
+        clearAllBtn.setSize(100, 50);
+        clearAllBtn.setLocation(175,313);
+        
+        piBtn.setSize(50,50);
+        piBtn.setLocation(350,187);
+        
+        expBtn.setSize(50,50);
+        expBtn.setLocation(300,187);
+        
+        sinBtn.setSize(75,50);
+        sinBtn.setLocation(112,250);
+        
+        cosBtn.setSize(75,50);
+        cosBtn.setLocation(187,250);
+        
+        tanBtn.setSize(75,50);
+        tanBtn.setLocation(262,250);
+        
+        label_Answer.setSize(70,50);
+        label_Answer.setLocation(73, 65);
+        label_Answer.setForeground(Color.WHITE);
+
+        label_input1.setSize(70,50);
+        label_input1.setLocation(85, 10);
+        label_input1.setForeground(Color.WHITE);
+
+        label_input2.setSize(70,50);
+        label_input2.setLocation(85, 37);
+        label_input2.setForeground(Color.WHITE);
+
+        //Input Text Fields
+        JPanel answerPanel = new JPanel(new FlowLayout());
+
+        answerPanel.add(input1);
+        answerPanel.add(input2);
+
+        answerPanel.add(answerField);
+        answerPanel.setSize(200, 100);
+        answerPanel.setLocation(125, 25);
+        answerPanel.setBackground(Color.black);
+        frame.add(answerPanel);
+
+        input1.requestFocusInWindow();
+
+        //What happens when the frame closes
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        //FINAL STEP: SET WINDOW TO VISIBLE
+        frame.setVisible(true);
+
+        //WHEN BUTTONS ARE CLICKED, ANSWER FIELD CONTAINS ANSWER
+        addBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                { 
+                    computeAnswer(1);
+                }
+            });
+        subtractBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                { 
+                    computeAnswer(2);
+                }
+            });
+        multiplyBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                {
+                    computeAnswer(3);
+                }
+            });
+        divideBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                { 
+                    computeAnswer(4);
+                }
+            });
+            
+        modBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                { 
+                    computeAnswer(5);
+                }
+            });
+            
+            sinBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                { 
+                    computeAnswer(7);
+                }
+            });
+            
+            cosBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                { 
+                    computeAnswer(8);
+                }
+            });
+            
+            tanBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                { 
+                    computeAnswer(9);
+                }
+            });
+            
+        clearAllBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                { 
+                    input1.setText("");
+                    input2.setText("");
+                    answerField.setText("");
+                    input1.requestFocusInWindow();
+                }
+            });
+            
+        piBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                { 
+                    if (input1.getText().length() > 0) {
+                        input2.setText("" + Math.PI);
+                    }
+                    else {
+                        input1.setText("" + Math.PI);
+                    }
+                }
+            });
+            
+        expBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                { 
+                    computeAnswer(6);
+                }
+            });
+
+        input1.addKeyListener(new KeyAdapter()
+            {
+                public void keyPressed(KeyEvent ke)
+                {
+                    if(!(ke.getKeyChar()==27||ke.getKeyChar()==65535))//this section will execute only when user is editing the JTextField
+                    {
+                        answerField.setText("");
+                    }
+                }
+            });
+
+        //         Maps Up Arrow to AnswerBtn, USE UP ARROW AS ENTER KEY
+        //         answerBtn.getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).
+        //         put(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_UP,0), "UpArrow_pressed");
+        //         answerBtn.getActionMap().put("UpArrow_pressed", answerPressed);
+
+    }
+    
+
+    private void computeAnswer(int choice)
+    {
+        if (choice == 7) {
+            input2.setText("One value required for sine");
+            answerField.setText("" + Math.sin(convertToDouble(input1)));
+        }
+        else if (choice == 8) {
+            input2.setText("One value required for cosine");
+            answerField.setText("" + Math.cos(convertToDouble(input1)));
+        }
+        else if (choice == 9) {
+            input2.setText("One value required for tangent");
+            answerField.setText("" + Math.tan(convertToDouble(input1)));
+        }
+        if (input1.getText().length() == 0 || input2.getText().length() == 0)
+        {    
+            answerField.setText("");
+            return;
+        }
+        if (choice == 1) {
+            answerField.setText("" + (convertToDouble(input1) + convertToDouble(input2)));
+        }
+        else if (choice == 2) {
+            answerField.setText("" + (convertToDouble(input1) - convertToDouble(input2)));
+        }
+        else if (choice == 3) {
+            answerField.setText("" + (convertToDouble(input1) * convertToDouble(input2)));
+        }
+        else if (choice == 4) {
+            answerField.setText("" + (convertToDouble(input1) / convertToDouble(input2)));
+        }
+        else if (choice == 5) {
+            answerField.setText("" + (convertToDouble(input1) % convertToDouble(input2)));
+        }
+        else if (choice == 6) {
+            answerField.setText("" + Math.pow(convertToDouble(input1),convertToDouble(input2)));
+        }
+        else if (choice == 7) {
+            answerField.setText("" + Math.sin(convertToDouble(input1)));
+        }
+        else if (choice == 8) {
+            answerField.setText("" + Math.cos(convertToDouble(input1)));
+        }
+        else if (choice == 9) {
+            answerField.setText("" + Math.tan(convertToDouble(input1)));
+        }
+        input1.requestFocusInWindow();
+    }
+
+
+    /***Takes JTextField and returns
+     *  value of text in JTextField***/
+    private static double convertToDouble(JTextField jtf)
+    {
+        String hold = jtf.getText();
+        double returnDouble = Double.parseDouble(hold);
+        return returnDouble;
+    }
+
+    //ALL METHODS BELOW DO NOT DO ANYTHING, THEY ARE ONLY PRESENT BECAUSE THE METHODS ARE ABSTRACT
+    /***Method is required only because actionPerformed
+     *  is an abstract method in ActionListener***/
+    public void actionPerformed(ActionEvent e){}
+
+    /***Method is required only because keyPressed
+     *  is an abstract method in KeyListener***/
+    public void keyPressed(KeyEvent e){}
+
+    /***Method is required only because keyReleased
+     *  is an abstract method in KeyListener***/
+    public void keyReleased(KeyEvent e){}
+
+    /***Method is required only because keyTyped
+     *  is an abstract method in KeyListener***/
+    public void keyTyped(KeyEvent e){}
+    
+    
+    //FINALLY, THE MAIN!!!
+    public static void main(String[] args)
+    {
+        new Calculator();
+    }
+
+}//END CLASS
