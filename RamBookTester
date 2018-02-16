@@ -1,0 +1,8 @@
+public class RamBookTester {
+    public static void main(String[] args) {
+        RamBook test = new RamBook();
+        test.printAllUsers();
+        
+        
+    }
+}
