@@ -4,44 +4,11 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 
-public class FileReader 
+public class ReadFile 
 {
     //The filename that you are reading in.  
     //The file must be located in the same directory as your code
-    public static final String FILENAME = "Example1.txt";
-    
-    
-    // public static void main(String[] args) 
-    // {
-        // //The "lines" ArrayList will read in each line from the file
-        // //and store each line as a String. 
-        // ArrayList<String> lines = new ArrayList<String>();    
-
-        
-        // //READS IN THE FILE INPUT **************************
-        // try{
-            // //read the file in as a List of String objects
-            // lines = readFile(FILENAME);
-        // }
-        // catch(Exception e){
-            // e.printStackTrace();
-        // }
-        // //***************************************************
-     
-        // /** Your code will go here. **/
-        
-        // //Printing out the contents of the ArrayList
-        // //Feel free to delete this.
-        // for (String s : lines)
-            // System.out.println(s);
-        
-        
-            
-            
-            
-            
-            
-    // }//END MAIN
+    public static final String FILENAME = "RamBook.txt";
     
 
     //Pre-written method used in the main to read in the file, line by line.
@@ -51,7 +18,7 @@ public class FileReader
         
         try{
             //read file
-            InputStream in = FileReader.class.getResourceAsStream(fileName);
+            InputStream in = ReadFile.class.getResourceAsStream(fileName);
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
     
             //loop through lines of input file
