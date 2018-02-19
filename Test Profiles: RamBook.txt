@@ -1,20 +1,21 @@
-Pranathi;123;20;Syracuse;JDHS,SU,null
-Cooper;123;21;Los Angeles;Beverly Hills High,UCLA,USC
-Andrew;123;30;DeWitt;JDHS,Rutgers,null
-Ian;123;43;Cleveland;null,null,null
-Hodge;123;68;NYC;PS999,NYU,null
-Ethan;123;16;Syracuse;FM,LeMoyne,University of Phoenix
-Brian;123;50;NYC;PS101,NYU,null
-Kaplan;123;66;Los Angeles;MBHS,null,null
-Kushnir;123;22;Cincinnati;Bengal HS,Ohio St.,null
-Billy;123;28;Los Angeles;LA HS,UCSB,Stanford
-Tristan;123;39;Syracuse;Corcoran,Oneonta,Stanford
-McFadden;123;19;Syracuse;Corcoran,null,null
-Haley;123;20;Syracuse;Corcoran,SU,null
-Neel;123;21;Los Angeles;Beverly Hills High,UCLA,USC
-Cam;123;30;DeWitt;F-P,null,null
-Sahil;123;32;Syracuse;Marcellus HS,Bucknell U,Binghamton U
-Michael;123;24;Mottville;null,null,null
-Isabel;123;31;DeWitt;JDHS,Oneonta,Stanford
-Nico;123;60;Los Angeles;LA HS,null,null
-Woodin;123;99;Syracuse;Marcellus HS,OCC,null
+Pranathi;123;hi;20;Syracuse;JDHS,SU,null
+Cooper;123;hi;21;Los Angeles;Beverly Hills High,UCLA,USC
+Andrew;123;hi;30;DeWitt;JDHS,Rutgers,null
+Ian;123;hi;43;Cleveland;null,null,null
+Hodge;123;hi;68;NYC;PS999,NYU,null
+Ethan;123;hi;16;Syracuse;FM,LeMoyne,University of Phoenix
+Brian;123;hi;50;NYC;PS101,NYU,null
+Kaplan;123;hi;66;Los Angeles;MBHS,null,null
+Kushnir;123;hi;22;Cincinnati;Bengal HS,Ohio St.,null
+Billy;123;hi;28;Los Angeles;LA HS,UCSB,Stanford
+Tristan;123;hi;39;Syracuse;Corcoran,Oneonta,Stanford
+McFadden;123;hi;19;Syracuse;Corcoran,null,null
+Haley;123;hi;20;Syracuse;Corcoran,SU,null
+Neel;123;hi;21;Los Angeles;Beverly Hills High,UCLA,USC
+Cam;123;hi;30;DeWitt;F-P,null,null
+Sahil;123;hi;32;Syracuse;Marcellus HS,Bucknell U,Binghamton U
+Michael;123;hi;24;Mottville;null,null,null
+Isabel;123;hi;31;DeWitt;JDHS,Oneonta,Stanford
+Nico;123;hi;60;Los Angeles;LA HS,null,null
+Woodin;123;hi;99;Syracuse;Marcellus HS,OCC,null
+ethan;321;Code;15;SYR;JDHS,null,null
