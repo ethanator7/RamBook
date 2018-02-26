@@ -8,17 +8,15 @@ public class ReadFile
 {
     //The filename that you are reading in.  
     //The file must be located in the same directory as your code
-    public static final String FILENAME = "RamBook.txt";
-    
-
     //Pre-written method used in the main to read in the file, line by line.
     //The only change that needs to be made is the class name in the "try" block
-    private static ArrayList<String> readFile(String fileName) throws Exception{
+    public static ArrayList<String> read(String file) throws Exception{
+        final String FILENAME = file;
         ArrayList<String> retVal = new ArrayList<String>();
         
         try{
             //read file
-            InputStream in = ReadFile.class.getResourceAsStream(fileName);
+            InputStream in = ReadFile.class.getResourceAsStream(FILENAME);
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
     
             //loop through lines of input file
