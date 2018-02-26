@@ -1,0 +1,893 @@
+import java.lang.Object.*;
+import javax.swing.*;
+import javax.swing.JOptionPane;
+import javax.swing.JComponent.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+
+public class Display extends JFrame implements ActionListener, KeyListener, WindowListener {
+    
+    private ArrayList<User> users;
+    private boolean finished;
+    private boolean loggedOut;
+    private boolean messaged;
+    private Message sentMessage;
+    
+    public static final int MAX_LENGTH = 40;
+    
+    public Display(ArrayList<User> u) {
+        users = u;
+        finished = false;
+        loggedOut = false;
+        messaged = false;
+        sentMessage = null;
+    }
+    
+    public void loginScreen() {
+        JFrame frame = new JFrame();
+        
+        JTextField inputUsername = new JTextField("",15);
+        JTextField inputPassword = new JTextField("",15);
+        
+        JLabel label_username = new JLabel("USERNAME: ");
+        JLabel label_password = new JLabel("PASSWORD: ");
+        JLabel label_profile = new JLabel("INVALID PROFILE");
+        
+        JButton signUpBtn = new JButton("SIGN UP");
+        JButton logInBtn = new JButton("LOGIN");
+        
+        
+        frame.getContentPane().setBackground(Color.BLUE);
+        frame.setLayout(null);
+        frame.pack();
+        frame.setSize(700,600);
+        frame.setTitle("Login");
+        
+        
+        signUpBtn.setBackground(Color.WHITE);
+        logInBtn.setBackground(Color.WHITE);
+        
+        frame.add(signUpBtn);
+        frame.add(logInBtn);
+        frame.add(label_username);
+        frame.add(label_password);
+        frame.add(label_profile);
+        
+        
+        signUpBtn.setSize(100,50);
+        signUpBtn.setLocation(50,50);
+        
+        logInBtn.setSize(100,50);
+        logInBtn.setLocation(300,250);
+        
+        
+        label_username.setSize(100,50);
+        label_username.setLocation(225,143);
+        label_username.setForeground(Color.WHITE);
+        
+        label_password.setSize(100,50);
+        label_password.setLocation(225,174);
+        label_password.setForeground(Color.WHITE);
+        
+        label_profile.setSize(125,50);
+        label_profile.setLocation(225,200);
+        label_profile.setForeground(Color.BLUE);
+        
+        JPanel inputPanel = new JPanel(new FlowLayout());
+        
+        inputPanel.add(inputUsername);
+        inputPanel.add(inputPassword);
+        
+        inputPanel.setSize(200,75);
+        inputPanel.setLocation(300,150);
+        inputPanel.setBackground(Color.blue);
+        frame.add(inputPanel);
+        
+        JButton closeBtn = new JButton("CLOSE");
+        closeBtn.setBackground(Color.WHITE);
+        closeBtn.setSize(100,50);
+        closeBtn.setLocation(50,100);
+        frame.add(closeBtn);
+        
+        inputUsername.requestFocusInWindow();
+        
+        
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        frame.setVisible(true);
+        
+        
+        
+        
+        PWSaver save = new PWSaver();
+        
+        inputPassword.addKeyListener(new KeyAdapter()
+            {
+                public void keyPressed(KeyEvent ke)
+                {
+                    String text = inputPassword.getText();
+                    if (text.length() < save.getPassword().length()) {
+                        save.removePassword();
+                    }
+                    else {
+                        save.addPassword(ke.getKeyChar() + "");
+                    }
+                    String dots = "";
+                    for (int i = 0; i < text.length(); i++) {
+                        dots += "•";
+                    }
+                    inputPassword.setText(dots);
+                }
+            });
+            
+        logInBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                {   
+                    label_profile.setForeground(Color.BLUE);
+                    String pw = save.getPassword().trim();
+                    boolean valid = false;
+                    for (User x : users) {
+                        if (x.getName().equals(inputUsername.getText())) {
+                            if (x.validPassword(pw)) {
+                                valid = true;
+                                profileScreen(x);
+                                frame.setVisible(false);
+                            }
+                        }
+                    }
+                    if (!valid) {
+                        label_profile.setForeground(Color.RED);
+                    }
+                }
+            });
+            
+        signUpBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                {   
+                    signupScreen();
+                    frame.setVisible(false);
+                }
+            });
+            
+        closeBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                {   
+                    finished = true;
+                    frame.setVisible(false);
+                }
+            });
+    }
+    
+    
+    public void signupScreen() {
+        JFrame frame = new JFrame();
+        
+        JTextField inputUsername = new JTextField("",15);
+        JTextField inputPassword = new JTextField("",15);
+        JTextField validPassword = new JTextField("",15);
+        
+        JLabel label_username = new JLabel("USERNAME: ");
+        JLabel label_password = new JLabel("PASSWORD: ");
+        JLabel label_valid = new JLabel("VALIDATE: ");
+        JLabel label_invalid = new JLabel("PASSWORDS DO NOT MATCH");
+        JLabel label_taken = new JLabel("PROFILE ALREADY EXISTS");
+        
+        JButton signUpBtn = new JButton("SIGN UP");
+        JButton logInBtn = new JButton("LOGIN");
+        
+        
+        frame.getContentPane().setBackground(Color.BLUE);
+        frame.setLayout(null);
+        frame.pack();
+        frame.setSize(700,600);
+        frame.setTitle("Signup");
+        
+        
+        signUpBtn.setBackground(Color.WHITE);
+        logInBtn.setBackground(Color.WHITE);
+        
+        frame.add(signUpBtn);
+        frame.add(logInBtn);
+        frame.add(label_username);
+        frame.add(label_password);
+        frame.add(label_valid);
+        frame.add(label_invalid);
+        frame.add(label_taken);
+        
+        
+        signUpBtn.setSize(100,50);
+        signUpBtn.setLocation(300,250);
+        
+        logInBtn.setSize(100,50);
+        logInBtn.setLocation(50,50);
+        
+        
+        
+        label_username.setSize(100,50);
+        label_username.setLocation(225,143);
+        label_username.setForeground(Color.WHITE);
+        
+        label_password.setSize(100,50);
+        label_password.setLocation(225,174);
+        label_password.setForeground(Color.WHITE);
+        
+        label_valid.setSize(100,50);
+        label_valid.setLocation(225,205);
+        label_valid.setForeground(Color.WHITE);
+        
+        label_invalid.setSize(200,50);
+        label_invalid.setLocation(100,260);
+        label_invalid.setForeground(Color.BLUE);
+        
+        label_taken.setSize(200,50);
+        label_taken.setLocation(100,240);
+        label_taken.setForeground(Color.BLUE);
+        
+        JPanel inputPanel = new JPanel(new FlowLayout());
+        
+        inputPanel.add(inputUsername);
+        inputPanel.add(inputPassword);
+        inputPanel.add(validPassword);
+        
+        inputPanel.setSize(200,120);
+        inputPanel.setLocation(300,150);
+        inputPanel.setBackground(Color.blue);
+        frame.add(inputPanel);
+        
+        inputUsername.requestFocusInWindow();
+        
+        JButton closeBtn = new JButton("CLOSE");
+        closeBtn.setBackground(Color.WHITE);
+        closeBtn.setSize(100,50);
+        closeBtn.setLocation(50,100);
+        frame.add(closeBtn);
+        
+        
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        frame.setVisible(true);
+        
+        
+        
+        
+            
+        logInBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                {   
+                    loginScreen();
+                    frame.setVisible(false);
+                }
+            });
+        
+        signUpBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                {   
+                    label_taken.setForeground(Color.BLUE);
+                    label_invalid.setForeground(Color.BLUE);
+                    boolean valid = true;
+                    String name = inputUsername.getText();
+                    for (User x : users) {
+                        if (name.equals(x.getName())) {
+                            valid = false;
+                            label_taken.setForeground(Color.RED);
+                        }
+                    }
+                    String pass = inputPassword.getText();
+                    String validate = validPassword.getText();
+                    if (!pass.equals(validate)) {
+                        label_invalid.setForeground(Color.RED);
+                        valid = false;
+                    }
+                    
+                    if (valid) {
+                        moreSignupScreen(name,pass);
+                        frame.setVisible(false);
+                    }
+                }
+            });
+            
+        closeBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                {   
+                    finished = true;
+                    frame.setVisible(false);
+                }
+            });
+        
+    }
+    
+    
+    public void moreSignupScreen(String name, String password) {
+        JFrame frame = new JFrame();
+        
+        JLabel label_max = new JLabel("MAX " + MAX_LENGTH + " CHARACTERS EACH");
+        JLabel label_description = new JLabel("DESCRIPTION: ");
+        JLabel label_age = new JLabel("AGE: ");
+        JLabel label_hometown = new JLabel("HOMETOWN: ");
+        JLabel label_schools = new JLabel("SCHOOLS: ");
+        JLabel label_atLeast = new JLabel("(AT LEAST ONE)");
+        JLabel label_invalid = new JLabel("ALL FIELDS ARE NOT FILLED OUT");
+        
+        JTextField inputDescription = new JTextField("",15);
+        JTextField inputAge = new JTextField("",15);
+        JTextField inputHometown = new JTextField("",15);
+        JTextField inputSchool1 = new JTextField("",15);
+        JTextField inputSchool2 = new JTextField("",15);
+        JTextField inputSchool3 = new JTextField("",15);
+        
+        JButton finishBtn = new JButton("FINISH SIGNUP");
+        JButton cancelBtn = new JButton("CANCEL");
+        
+        frame.getContentPane().setBackground(Color.BLUE);
+        frame.setLayout(null);
+        frame.pack();
+        frame.setSize(700,600);
+        frame.setTitle("More Signup");
+        
+        finishBtn.setBackground(Color.WHITE);
+        cancelBtn.setBackground(Color.WHITE);
+        
+        frame.add(label_max);
+        frame.add(label_description);
+        frame.add(label_age);
+        frame.add(label_hometown);
+        frame.add(label_schools);
+        frame.add(label_atLeast);
+        frame.add(label_invalid);
+        frame.add(finishBtn);
+        frame.add(cancelBtn);
+        
+        finishBtn.setSize(125,50);
+        finishBtn.setLocation(300,300);
+        
+        cancelBtn.setSize(100,50);
+        cancelBtn.setLocation(50,50);
+        
+        label_max.setSize(200,50);
+        label_max.setLocation(275,15);
+        label_max.setForeground(Color.WHITE);
+        
+        label_description.setSize(100,50);
+        label_description.setLocation(200,94);
+        label_description.setForeground(Color.WHITE);
+        
+        label_age.setSize(50,50);
+        label_age.setLocation(200,125);
+        label_age.setForeground(Color.WHITE);
+        
+        label_hometown.setSize(100,50);
+        label_hometown.setLocation(200,156);
+        label_hometown.setForeground(Color.WHITE);
+        
+        label_schools.setSize(100,50);
+        label_schools.setLocation(200,186);
+        label_schools.setForeground(Color.WHITE);
+        label_atLeast.setSize(100,50);
+        label_atLeast.setLocation(200,200);
+        label_atLeast.setForeground(Color.WHITE);
+        
+        label_invalid.setSize(250,50);
+        label_invalid.setLocation(75,300);
+        label_invalid.setForeground(Color.BLUE);
+        
+        
+        JPanel dataPanel = new JPanel(new FlowLayout());
+        
+        dataPanel.add(inputDescription);
+        dataPanel.add(inputAge);
+        dataPanel.add(inputHometown);
+        dataPanel.add(inputSchool1);
+        dataPanel.add(inputSchool2);
+        dataPanel.add(inputSchool3);
+        
+        dataPanel.setSize(200,400);
+        dataPanel.setLocation(300,100);
+        dataPanel.setBackground(Color.BLUE);
+        
+        frame.add(dataPanel);
+        
+        
+        inputDescription.requestFocusInWindow();
+        
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        frame.setVisible(true);
+        
+        
+        finishBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                {   
+                    label_invalid.setForeground(Color.BLUE);
+                    boolean valid = true;
+                    
+                    String desc = inputDescription.getText().trim();
+                    String hometown = inputHometown.getText().trim();
+                    String[] schools = { inputSchool1.getText().trim(), inputSchool2.getText().trim(), inputSchool3.getText().trim() };
+                    
+                    for (int i = 0; i < schools.length; i++) {
+                        if (schools[i].equals("")) {
+                            schools[i] = "null";
+                        }
+                    }
+                    
+                    if (desc.length() == 0 || inputAge.getText().trim().length() == 0 || hometown.length() == 0 || schools[0].length() == 0) {
+                        label_invalid.setForeground(Color.RED);
+                        valid = false;
+                    }
+                    
+                    if (valid) {
+                        int age = Integer.parseInt(inputAge.getText());
+                        User newUser = new User(name,password,desc,age,hometown,schools);
+                        users.add(newUser);
+                        profileScreen(newUser);
+                        frame.setVisible(false);
+                    }
+                }
+            });
+            
+        cancelBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                {   
+                    loginScreen();
+                    frame.setVisible(false);
+                }
+            });
+            
+            
+        inputDescription.addKeyListener(new KeyAdapter()
+            {
+                public void keyPressed(KeyEvent ke)
+                {
+                    String text = inputDescription.getText();
+                    if (text.length() >= MAX_LENGTH) {
+                        text = text.substring(0,MAX_LENGTH);
+                    }
+                    inputDescription.setText(text);
+                }
+            });
+            
+        inputAge.addKeyListener(new KeyAdapter()
+            {
+                public void keyPressed(KeyEvent ke)
+                {
+                    String text = inputAge.getText();
+                    if (text.length() >= MAX_LENGTH) {
+                        text = text.substring(0,MAX_LENGTH);
+                    }
+                    inputAge.setText(text);
+                }
+            });
+            
+        inputHometown.addKeyListener(new KeyAdapter()
+            {
+                public void keyPressed(KeyEvent ke)
+                {
+                    String text = inputHometown.getText();
+                    if (text.length() >= MAX_LENGTH) {
+                        text = text.substring(0,MAX_LENGTH);
+                    }
+                    inputHometown.setText(text);
+                }
+            });
+            
+        inputSchool1.addKeyListener(new KeyAdapter()
+            {
+                public void keyPressed(KeyEvent ke)
+                {
+                    String text = inputSchool1.getText();
+                    if (text.length() >= MAX_LENGTH) {
+                        text = text.substring(0,MAX_LENGTH);
+                    }
+                    inputSchool1.setText(text);
+                }
+            });
+            
+        inputSchool2.addKeyListener(new KeyAdapter()
+            {
+                public void keyPressed(KeyEvent ke)
+                {
+                    String text = inputSchool2.getText();
+                    if (text.length() >= MAX_LENGTH) {
+                        text = text.substring(0,MAX_LENGTH);
+                    }
+                    inputSchool2.setText(text);
+                }
+            });
+            
+        inputSchool2.addKeyListener(new KeyAdapter()
+            {
+                public void keyPressed(KeyEvent ke)
+                {
+                    String text = inputSchool2.getText();
+                    if (text.length() >= MAX_LENGTH) {
+                        text = text.substring(0,MAX_LENGTH);
+                    }
+                    inputSchool2.setText(text);
+                }
+            });
+        
+    }
+    
+    
+    public void profileScreen(User user) {
+        
+        JFrame frame = new JFrame();
+        
+        //JLabel label_name = new JLabel("Name: " + user.getName());
+        JLabel label_description = new JLabel("Description: " + user.getDescription());
+        JLabel label_age = new JLabel("Age: " + user.getAge());
+        JLabel label_hometown = new JLabel("Hometown: " + user.getHometown());
+        
+        String schoolHold = "Schools:";
+        String[] schools = user.getSchools();
+        for (int i = 0; i < schools.length; i++) {
+            if (!schools[i].equals("null")) {
+                if (i != 0) {
+                    schoolHold += ",";
+                }
+                schoolHold += " " + schools[i];
+            }
+        }
+        JLabel label_schools = new JLabel(schoolHold);
+        
+        JButton logoutBtn = new JButton("LOGOUT");
+        JButton messageBtn = new JButton("MESSAGE");
+        JButton friendsBtn = new JButton("FRIENDS");
+        JButton inboxBtn = new JButton("INBOX");
+        
+        
+        JTextArea name = new JTextArea("Name: " + user.getName());
+        name.setEnabled(false);
+        JScrollPane scrollName = new JScrollPane(name);
+        
+        name.setFont(name.getFont().deriveFont(20.0f));
+        
+        frame.getContentPane().setBackground(Color.WHITE);
+        frame.setLayout(null);
+        frame.pack();
+        frame.setSize(700,600);
+        frame.setTitle("Profile");
+        
+        logoutBtn.setBackground(Color.BLUE);
+        logoutBtn.setForeground(Color.BLUE);
+        messageBtn.setBackground(Color.BLUE);
+        messageBtn.setForeground(Color.BLUE);
+        friendsBtn.setBackground(Color.BLUE);
+        friendsBtn.setForeground(Color.BLUE);
+        inboxBtn.setBackground(Color.BLUE);
+        inboxBtn.setForeground(Color.BLUE);
+        
+        logoutBtn.setSize(100,50);
+        logoutBtn.setLocation(50,50);
+        
+        messageBtn.setSize(100,50);
+        messageBtn.setLocation(500,100);
+        
+        friendsBtn.setSize(100,50);
+        friendsBtn.setLocation(500,50);
+        
+        inboxBtn.setSize(100,50);
+        inboxBtn.setLocation(500,150);
+        
+        
+        name.setSize(300,20);
+        name.setLineWrap(true);
+        name.setWrapStyleWord(true);
+        name.setLocation(200,55);
+        name.setBackground(Color.WHITE);
+        
+        
+        label_description.setSize(300,100);
+        label_description.setLocation(200,45);
+        label_description.setForeground(Color.BLUE);
+        
+        label_age.setSize(300,100);
+        label_age.setLocation(200,60);
+        label_age.setForeground(Color.BLUE);
+        
+        label_hometown.setSize(300,100);
+        label_hometown.setLocation(200,75);
+        label_hometown.setForeground(Color.BLUE);
+        
+        label_schools.setSize(300,100);
+        label_schools.setLocation(200,90);
+        label_schools.setForeground(Color.BLUE);
+        
+        frame.add(logoutBtn);
+        frame.add(messageBtn);
+        frame.add(friendsBtn);
+        frame.add(inboxBtn);
+        frame.add(name);
+        frame.add(label_description);
+        frame.add(label_age);
+        frame.add(label_hometown);
+        frame.add(label_schools);
+        
+        JButton closeBtn = new JButton("CLOSE");
+        closeBtn.setBackground(Color.BLUE);
+        closeBtn.setForeground(Color.BLUE);
+        closeBtn.setSize(100,50);
+        closeBtn.setLocation(50,100);
+        frame.add(closeBtn);
+        
+        
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        frame.setVisible(true);
+        
+        
+        closeBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                {   
+                    finished = true;
+                    frame.setVisible(false);
+                }
+            });
+            
+        logoutBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                {   
+                    loggedOut = true;
+                    loginScreen();
+                    frame.setVisible(false);
+                }
+            });
+            
+        inboxBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                {   
+                    inboxScreen(user);
+                    frame.setVisible(false);
+                }
+            });
+            
+        messageBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                {   
+                    messageScreen(user);
+                    frame.setVisible(false);
+                }
+            });
+    }
+    
+    public void inboxScreen(User user) {
+        JFrame frame = new JFrame();
+        
+        ArrayList<Message> mess = user.readMessages();
+        Message[] messages = new Message[mess.size()];
+        for (int i = 0; i < mess.size(); i++) {
+            messages[i] = mess.get(i);
+        }
+        
+        
+        JButton backBtn = new JButton("BACK");
+        
+        JList listMessages = new JList(messages);
+        
+        frame.getContentPane().setBackground(Color.WHITE);
+        frame.setLayout(null);
+        frame.pack();
+        frame.setSize(700,600);
+        frame.setTitle("Inbox");
+        
+        backBtn.setBackground(Color.BLUE);
+        backBtn.setForeground(Color.BLUE);
+        
+        backBtn.setSize(100,50);
+        backBtn.setLocation(50,50);
+        
+        listMessages.setSize(200,50);
+        listMessages.setLocation(200,75);
+        
+        
+        frame.add(listMessages);
+        frame.add(backBtn);
+        
+        JButton closeBtn = new JButton("CLOSE");
+        closeBtn.setBackground(Color.BLUE);
+        closeBtn.setForeground(Color.BLUE);
+        closeBtn.setSize(100,50);
+        closeBtn.setLocation(50,100);
+        frame.add(closeBtn);
+        
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+        
+        
+        backBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                {   
+                    profileScreen(user);
+                    frame.setVisible(false);
+                }
+            });
+        closeBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                {   
+                    finished = true;
+                    frame.setVisible(false);
+                }
+            });
+    }
+    
+    public void messageScreen(User user) {
+        JFrame frame = new JFrame();
+        
+        JButton sendBtn = new JButton("SEND");
+        JButton cancelBtn = new JButton("CANCEL");
+        
+        JLabel label_to = new JLabel("TO: ");
+        JLabel label_message = new JLabel("MESSAGE: ");
+        JLabel label_invalid = new JLabel("NOT A VALID USERNAME");
+        JLabel label_sent = new JLabel("MESSAGE SENT");
+        
+        JTextField inputTo = new JTextField("",15);
+        JTextField inputMessage = new JTextField("",15);
+        
+        frame.getContentPane().setBackground(Color.WHITE);
+        frame.setLayout(null);
+        frame.pack();
+        frame.setSize(700,600);
+        frame.setTitle("Message");
+        
+        cancelBtn.setForeground(Color.BLUE);
+        cancelBtn.setBackground(Color.BLUE);
+        cancelBtn.setSize(100,50);
+        cancelBtn.setLocation(50,50);
+        
+        label_to.setSize(100,50);
+        label_to.setLocation(225,143);
+        label_to.setForeground(Color.BLUE);
+        
+        label_message.setSize(100,50);
+        label_message.setLocation(225,174);
+        label_message.setForeground(Color.BLUE);
+        
+        sendBtn.setForeground(Color.BLUE);
+        sendBtn.setBackground(Color.BLUE);
+        sendBtn.setSize(100,50);
+        sendBtn.setLocation(300,250);
+        
+        label_sent.setSize(100,50);
+        label_sent.setLocation(200,260);
+        label_sent.setForeground(Color.WHITE);
+        
+        label_invalid.setSize(175,50);
+        label_invalid.setLocation(125,240);
+        label_invalid.setForeground(Color.WHITE);
+        
+        frame.add(sendBtn);
+        frame.add(cancelBtn);
+        frame.add(label_to);
+        frame.add(label_message);
+        frame.add(label_sent);
+        frame.add(label_invalid);
+        
+        JPanel messagePanel = new JPanel();
+        
+        messagePanel.add(inputTo);
+        messagePanel.add(inputMessage);
+        
+        messagePanel.setSize(200,75);
+        messagePanel.setBackground(Color.WHITE);
+        messagePanel.setLocation(300,150);
+        
+        frame.add(messagePanel);
+        
+        
+        
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+        
+        cancelBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                {   
+                    profileScreen(user);
+                    frame.setVisible(false);
+                }
+            });
+            
+        sendBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                {   
+                    label_invalid.setForeground(Color.WHITE);
+                    label_sent.setForeground(Color.WHITE);
+                    boolean send = false;
+                    for (User x : users) {
+                        if (x.getName().equals(inputTo.getText())) {
+                            send = true;
+                        }
+                    }
+                    
+                    if (send) {
+                        label_sent.setForeground(Color.BLUE);
+                        try{Thread.sleep(1000);}
+                        catch(InterruptedException ie){}
+                        messaged = true;
+                        sentMessage = new Message(user.getName(),inputTo.getText(),inputMessage.getText());
+                        profileScreen(user);
+                        frame.setVisible(false);
+                    }
+                    else {
+                        label_invalid.setForeground(Color.RED);
+                    }
+                }
+            });
+    }
+    
+    
+    
+    
+    
+    
+
+    //ALL METHODS BELOW DO NOT DO ANYTHING, THEY ARE ONLY PRESENT BECAUSE THE METHODS ARE ABSTRACT
+    /***Method is required only because actionPerformed
+     *  is an abstract method in ActionListener***/
+    public void actionPerformed(ActionEvent e){}
+
+    /***Method is required only because keyPressed
+     *  is an abstract method in KeyListener***/
+    public void keyPressed(KeyEvent e){}
+
+    /***Method is required only because keyReleased
+     *  is an abstract method in KeyListener***/
+    public void keyReleased(KeyEvent e){}
+
+    /***Method is required only because keyTyped
+     *  is an abstract method in KeyListener***/
+    public void keyTyped(KeyEvent e){}
+    
+    
+    public void windowDeactivated(WindowEvent e) {}
+    
+    public void windowActivated(WindowEvent e) {}
+    
+    public void windowDeiconified(WindowEvent e) {}
+    
+    public void windowIconified(WindowEvent e) {}
+    
+    public void windowClosed(WindowEvent e) {}
+    
+    public void windowClosing(WindowEvent e) {}
+    
+    public void windowOpened(WindowEvent e) {}
+    
+    
+    
+    
+    public boolean isFinished() {
+        return finished;
+    }
+    
+    public ArrayList<User> getUsers() {
+        return users;
+    }
+    
+    public boolean sent() {
+        return messaged;
+    }
+    
+    public Message getSentMessage() {
+        return sentMessage;
+    }
+    
+    
+}
