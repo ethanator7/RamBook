@@ -4,21 +4,27 @@ public class User
 {
     //INSTANCE FIELDS
     private String name;
+    private String password;
+    private String description;
     private int age;
     private String hometown;
     private String[] schools;
     private ArrayList<User> friendsList;
+    private ArrayList<Message> messages;
     
     //CONSTRUCTOR - DONE FOR YOU
     //NOTE - it leaves the friendsList empty
-    public User(String n, int a, String h, String[] s)
+    
+    public User(String n, String p, String  d, int a, String h, String[] s) 
     {
         name = n;
+        password = p;
+        description = d;
         age = a;
         hometown = h;
         schools = s;
         friendsList = new ArrayList<User>(); 
-        
+        messages = new ArrayList<Message>();
     }//END Constructor
     
     // DONE FOR YOU
@@ -36,24 +42,25 @@ public class User
     {
         String retStr = "";
         retStr += "Name: \t\t" + name + "\n";
+        retStr += "Description: \t" + description + "\n";
         retStr += "Age: \t\t" + age + "\n";
         retStr += "Hometown: \t" + hometown + "\n";
         
         //Need to include schools and friendslist
         retStr += "Schools: \t";
         for (int i = 0; i < schools.length; i++) {
-            if (schools[i] != null) {
+            if (!schools[i].equals("null")) {
+                if (i != 0) {
+                    retStr += ", ";
+                }
                 retStr += schools[i];
-                if (i < schools.length - 1 && schools[i+1] != null) 
-                    retStr += ",";
-                retStr += " ";
             }
         }
         
         retStr += "\nFriends: \t";
         for (int i = 0; i < friendsList.size(); i++) {
             retStr += friendsList.get(i).getName();
-            if (i < friendsList.size() - 1 && friendsList.get(i + 1) != null) 
+            if (i < friendsList.size() - 1) 
                 retStr += ",";
             retStr += " ";
         }
@@ -69,6 +76,22 @@ public class User
     {
         return name;
     }//END getName
+    
+    public String getDescription() {
+        return description;
+    }
+    
+    public int getAge() {
+        return age;
+    }
+    
+    public String getHometown() {
+        return hometown;
+    }
+    
+    public String[] getSchools() {
+        return schools;
+    }
     
     public boolean equals(User other) {
         return this.getName().equals(other.getName()) && this.hometown.equals(other.hometown) && this.age == other.age;
@@ -92,6 +115,13 @@ public class User
     
     public ArrayList<User> getFriends() {
         return friendsList;
+    }
+    
+    public boolean validPassword(String pw) {
+        if (pw.equals(password)) {
+            return true;
+        }
+        return false;
     }
     
     public ArrayList<User> getMutualFriends(User other) {
@@ -171,7 +201,26 @@ public class User
         return pos.get(randPos);
     }
     
+    public String writeUser() {
+        String line = "";
+        line += name + ";";
+        line += password + ";";
+        line += description + ";";
+        line += age + ";";
+        line += hometown + ";";
+        line += schools[0] + "," + schools[1] + "," + schools[2] + ";";
+        return line;
+    }
     
+    public void sendMessage(Message m) {
+        if (m.getTo().equals(name)) {
+            messages.add(m);
+        }
+    }
+    
+    public ArrayList<Message> readMessages() {
+        return messages;
+    }
     
     
     
