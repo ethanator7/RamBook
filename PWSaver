@@ -1,0 +1,23 @@
+public class PWSaver {
+    private String password;
+    
+    public PWSaver() {
+        password = "";
+    }
+    public PWSaver(String pw) {
+        password = pw;
+    }
+    
+    public void addPassword(String a) {
+        password += a;
+    }
+    
+    public void removePassword() {
+        password = password.substring(0,password.length() - 1);
+    }
+    
+    public String getPassword() {
+        return password;
+    }
+    
+}
