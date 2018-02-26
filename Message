@@ -1,0 +1,26 @@
+import java.util.*;
+public class Message {
+    private String from;
+    private String to;
+    private String message;
+    
+    public Message(String f, String t, String m) {
+        from = f;
+        to = t;
+        message = m;
+    }
+    
+    public String getFrom() {
+        return from;
+    }
+    public String getTo() {
+        return to;
+    }
+    public String getMessage() {
+        return message;
+    }
+    
+    public String toString() {
+        return "FROM " + from + ": " + message;
+    }
+}
