@@ -1,8 +1,35 @@
+import java.util.*;
 public class RamBookTester {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
         RamBook test = new RamBook();
+        test.readMessages();
+        test.sendMessages();
         test.printAllUsers();
         
+        Display display = new Display(test.getUsers());
+        display.loginScreen();
         
+        while (!display.isFinished() && !display.sent()) {
+            System.out.print("");
+            if (display.sent()) {
+                test.sendMessage(display.getSentMessage());
+            }
+            if (display.isFinished()) {
+                break;
+            }
+        }
+        
+        test.setUsers(display.getUsers());
+        test.writeUsers();
+        test.writeMessages();
+        
+        ArrayList<String> users = ReadFile.read("RamBook.txt");
+        for (String u : users) {
+            System.out.println(u);  
+        }
+        ArrayList<String> messages = ReadFile.read("messages.txt");
+        for (String m : messages) {
+            System.out.println(m);
+        }
     }
 }
