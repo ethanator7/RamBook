@@ -28,7 +28,7 @@ public class Display extends JFrame implements ActionListener, KeyListener, Wind
         JFrame frame = new JFrame();
         
         JTextField inputUsername = new JTextField("",15);
-        JTextField inputPassword = new JTextField("",15);
+        JPasswordField inputPassword = new JPasswordField("",15);
         
         JLabel label_username = new JLabel("USERNAME: ");
         JLabel label_password = new JLabel("PASSWORD: ");
@@ -97,30 +97,6 @@ public class Display extends JFrame implements ActionListener, KeyListener, Wind
         frame.setResizable(false);
         frame.setVisible(true);
         
-        
-        
-        
-        PWSaver save = new PWSaver();
-        
-        inputPassword.addKeyListener(new KeyAdapter()
-            {
-                public void keyPressed(KeyEvent ke)
-                {
-                    String text = inputPassword.getText();
-                    if (text.length() < save.getPassword().length()) {
-                        save.removePassword();
-                    }
-                    else {
-                        save.addPassword(ke.getKeyChar() + "");
-                    }
-                    String dots = "";
-                    for (int i = 0; i < text.length(); i++) {
-                        dots += "•";
-                    }
-                    inputPassword.setText(dots);
-                }
-            });
-            
         logInBtn.addActionListener(new ActionListener()
             {
                 public void actionPerformed(ActionEvent arg0)
