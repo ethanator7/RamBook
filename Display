@@ -97,12 +97,13 @@ public class Display extends JFrame implements ActionListener, KeyListener, Wind
         frame.setResizable(false);
         frame.setVisible(true);
         
+            
         logInBtn.addActionListener(new ActionListener()
             {
                 public void actionPerformed(ActionEvent arg0)
                 {   
                     label_profile.setForeground(Color.BLUE);
-                    String pw = save.getPassword().trim();
+                    String pw = inputPassword.getText();
                     boolean valid = false;
                     for (User x : users) {
                         if (x.getName().equals(inputUsername.getText())) {
@@ -143,8 +144,8 @@ public class Display extends JFrame implements ActionListener, KeyListener, Wind
         JFrame frame = new JFrame();
         
         JTextField inputUsername = new JTextField("",15);
-        JTextField inputPassword = new JTextField("",15);
-        JTextField validPassword = new JTextField("",15);
+        JPasswordField inputPassword = new JPasswordField("",15);
+        JPasswordField validPassword = new JPasswordField("",15);
         
         JLabel label_username = new JLabel("USERNAME: ");
         JLabel label_password = new JLabel("PASSWORD: ");
@@ -534,13 +535,13 @@ public class Display extends JFrame implements ActionListener, KeyListener, Wind
         frame.setTitle("Profile");
         
         logoutBtn.setBackground(Color.BLUE);
-        logoutBtn.setForeground(Color.BLUE);
+        logoutBtn.setForeground(Color.WHITE);
         messageBtn.setBackground(Color.BLUE);
-        messageBtn.setForeground(Color.BLUE);
+        messageBtn.setForeground(Color.WHITE);
         friendsBtn.setBackground(Color.BLUE);
-        friendsBtn.setForeground(Color.BLUE);
+        friendsBtn.setForeground(Color.WHITE);
         inboxBtn.setBackground(Color.BLUE);
-        inboxBtn.setForeground(Color.BLUE);
+        inboxBtn.setForeground(Color.WHITE);
         
         logoutBtn.setSize(100,50);
         logoutBtn.setLocation(50,50);
@@ -558,7 +559,7 @@ public class Display extends JFrame implements ActionListener, KeyListener, Wind
         name.setSize(300,20);
         name.setLineWrap(true);
         name.setWrapStyleWord(true);
-        name.setLocation(200,55);
+        name.setLocation(200,50);
         name.setBackground(Color.WHITE);
         
         
@@ -590,7 +591,7 @@ public class Display extends JFrame implements ActionListener, KeyListener, Wind
         
         JButton closeBtn = new JButton("CLOSE");
         closeBtn.setBackground(Color.BLUE);
-        closeBtn.setForeground(Color.BLUE);
+        closeBtn.setForeground(Color.WHITE);
         closeBtn.setSize(100,50);
         closeBtn.setLocation(50,100);
         frame.add(closeBtn);
@@ -660,7 +661,7 @@ public class Display extends JFrame implements ActionListener, KeyListener, Wind
         frame.setTitle("Inbox");
         
         backBtn.setBackground(Color.BLUE);
-        backBtn.setForeground(Color.BLUE);
+        backBtn.setForeground(Color.WHITE);
         
         backBtn.setSize(100,50);
         backBtn.setLocation(50,50);
@@ -674,7 +675,7 @@ public class Display extends JFrame implements ActionListener, KeyListener, Wind
         
         JButton closeBtn = new JButton("CLOSE");
         closeBtn.setBackground(Color.BLUE);
-        closeBtn.setForeground(Color.BLUE);
+        closeBtn.setForeground(Color.WHITE);
         closeBtn.setSize(100,50);
         closeBtn.setLocation(50,100);
         frame.add(closeBtn);
@@ -721,7 +722,7 @@ public class Display extends JFrame implements ActionListener, KeyListener, Wind
         frame.setSize(700,600);
         frame.setTitle("Message");
         
-        cancelBtn.setForeground(Color.BLUE);
+        cancelBtn.setForeground(Color.WHITE);
         cancelBtn.setBackground(Color.BLUE);
         cancelBtn.setSize(100,50);
         cancelBtn.setLocation(50,50);
@@ -734,7 +735,7 @@ public class Display extends JFrame implements ActionListener, KeyListener, Wind
         label_message.setLocation(225,174);
         label_message.setForeground(Color.BLUE);
         
-        sendBtn.setForeground(Color.BLUE);
+        sendBtn.setForeground(Color.WHITE);
         sendBtn.setBackground(Color.BLUE);
         sendBtn.setSize(100,50);
         sendBtn.setLocation(300,250);
