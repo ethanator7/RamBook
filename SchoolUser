@@ -1,0 +1,254 @@
+import java.util.*;
+
+public class User
+{
+    //INSTANCE FIELDS
+    private String name;
+    private String password;
+    private String description;
+    private int age;
+    private String hometown;
+    private String[] schools;
+    private ArrayList<User> friendsList;
+    private ArrayList<Message> messages;
+    
+    //CONSTRUCTOR - DONE FOR YOU
+    //NOTE - it leaves the friendsList empty
+    
+    public User(String n, String p, String  d, int a, String h, String[] s) 
+    {
+        name = n;
+        password = p;
+        description = d;
+        age = a;
+        hometown = h;
+        schools = s;
+        friendsList = new ArrayList<User>(); 
+        messages = new ArrayList<Message>();
+    }//END Constructor
+    
+    public User(String n, int a, String h, String[] s) {
+        name = n;
+        age = a;
+        hometown = h;
+        schools = s;
+        friendsList = new ArrayList<User>(); 
+    }
+    
+    // DONE FOR YOU
+    // Accepts a List of Users that will replace the current friendsList
+    public void bulkAddFriends(ArrayList<User> u)
+    {
+        friendsList = u;
+    }//END bulkAddFriends
+    
+
+    
+    // STARTED FOR YOU
+    // Should print out all information for the user, nicely formatted
+    public String toString()
+    {
+        String retStr = "";
+        retStr += "Name: \t\t" + name + "\n";
+        retStr += "Description: \t" + description + "\n";
+        retStr += "Age: \t\t" + age + "\n";
+        retStr += "Hometown: \t" + hometown + "\n";
+        
+        //Need to include schools and friendslist
+        retStr += "Schools: \t";
+        for (int i = 0; i < schools.length; i++) {
+            if (!(schools[i] == null)) {
+                if (i != 0) {
+                    retStr += ", ";
+                }
+                retStr += schools[i];
+            }
+        }
+        
+        retStr += "\nFriends: \t";
+        for (int i = 0; i < friendsList.size(); i++) {
+            retStr += friendsList.get(i).getName();
+            if (i < friendsList.size() - 1) 
+                retStr += ",";
+            retStr += " ";
+        }
+        
+        
+        return retStr;
+    }//END toString
+    
+    
+    // DONE FOR YOU
+    // Returns the User's name
+    public String getName()
+    {
+        return name;
+    }//END getName
+    
+    public String getDescription() {
+        return description;
+    }
+    
+    public int getAge() {
+        return age;
+    }
+    
+    public String getHometown() {
+        return hometown;
+    }
+    
+    public String[] getSchools() {
+        return schools;
+    }
+    
+    public boolean equals(User other) {
+        return this.getName().equals(other.getName()) && this.hometown.equals(other.hometown) && this.age == other.age;
+    }
+    
+    public void addFriend(User friend) {
+        friendsList.add(friend);
+    }
+    
+    public void unfriend(String friend) {
+        for (int i = 0; i < friendsList.size(); i++) {
+            if (friendsList.get(i).equals(friend)) {
+                friendsList.remove(i);
+            }
+        }
+    }
+    
+    public int countFriends() {
+        return friendsList.size();
+    }
+    
+    public ArrayList<User> getFriends() {
+        return friendsList;
+    }
+    
+    public boolean validPassword(String pw) {
+        if (pw.equals(password)) {
+            return true;
+        }
+        return false;
+    }
+    
+    public ArrayList<User> getMutualFriends(User other) {
+        ArrayList<User> mutuals = new ArrayList<User>();
+        
+        for (int i = 0; i < this.friendsList.size(); i++) {
+            for (int j = 0; j < other.friendsList.size(); j++) {
+                if (this.friendsList.get(i).equals(other.friendsList.get(j))) {
+                    mutuals.add(friendsList.get(i));
+                }
+            }
+        }
+        
+        for (int i = 0; i < mutuals.size(); i++) {
+            if (mutuals.get(i).equals(this) || mutuals.get(i).equals(other)) {
+                mutuals.remove(i);
+            }
+        }
+        
+        return mutuals;
+    }
+    
+    public ArrayList<User> getHometownFriends() {
+        ArrayList<User> homies = new ArrayList<User>();
+        
+        for (User x : friendsList) {
+            if (x.hometown.equals(this.hometown)) {
+                homies.add(x);
+            }
+        }
+        
+        return homies;
+    }
+    
+    public ArrayList<User> getSchoolmates() {
+        ArrayList<User> schoolmates = new ArrayList<User>();
+        boolean mate = false;
+        
+        for (User x : friendsList) {
+            mate = false;
+            for (String y : x.schools) {
+                if (!(y == null)) {
+                    for(String z : this.schools) {
+                        if (!(z == null)) {
+                            if (y.equals(z)) {
+                                mate = true;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            if (mate) {
+                schoolmates.add(x);
+            }
+        }
+        
+        return schoolmates;
+    }
+    
+    public User suggestAFriend() {
+        ArrayList<User> pos = new ArrayList<User>();
+        
+        for (User x : this.friendsList) {
+            for (User y : x.friendsList) {
+                if (y.hometown.equals(this.hometown)) {
+                    pos.add(y);
+                }
+            }
+        }
+        
+        for (int i = 0; i < pos.size(); i++) {
+            if (pos.get(i).equals(this)) {
+                pos.remove(i);
+            }
+            else {
+                for (User x : this.friendsList) {
+                    if (pos.get(i).equals(x)) {
+                        pos.remove(i);
+                    }
+                }
+            }
+        }
+        
+        if (pos.size() == 0) {
+            return null;
+        }
+        
+        int randPos = (int)(Math.random() * pos.size());
+        return pos.get(randPos);
+    }
+    
+    public String writeUser() {
+        String line = "";
+        line += name + ";";
+        line += password + ";";
+        line += description + ";";
+        line += age + ";";
+        line += hometown + ";";
+        line += schools[0] + "," + schools[1] + "," + schools[2] + ";";
+        return line;
+    }
+    
+    public void sendMessage(Message m) {
+        if (m.getTo().equals(name)) {
+            messages.add(m);
+        }
+    }
+    
+    public ArrayList<Message> readMessages() {
+        return messages;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+}//END CLASS
