@@ -9,10 +9,11 @@ public class RamBookTester {
         Display display = new Display(test.getUsers());
         display.loginScreen();
         
-        while (!display.isFinished() && !display.sent()) {
+        while (!display.isFinished() || !display.sent()) {
             System.out.print("");
             if (display.sent()) {
                 test.sendMessage(display.getSentMessage());
+                display.resetMessage();
             }
             if (display.isFinished()) {
                 break;
