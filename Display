@@ -520,6 +520,7 @@ public class Display extends JFrame implements ActionListener, KeyListener, Wind
         JButton messageBtn = new JButton("MESSAGE");
         JButton friendsBtn = new JButton("FRIENDS");
         JButton inboxBtn = new JButton("INBOX");
+        JButton searchBtn = new JButton("SEARCH");
         
         
         JTextArea name = new JTextArea("Name: " + user.getName());
@@ -542,6 +543,8 @@ public class Display extends JFrame implements ActionListener, KeyListener, Wind
         friendsBtn.setForeground(Color.WHITE);
         inboxBtn.setBackground(Color.BLUE);
         inboxBtn.setForeground(Color.WHITE);
+        searchBtn.setBackground(Color.BLUE);
+        searchBtn.setForeground(Color.WHITE);
         
         logoutBtn.setSize(100,50);
         logoutBtn.setLocation(50,50);
@@ -554,6 +557,9 @@ public class Display extends JFrame implements ActionListener, KeyListener, Wind
         
         inboxBtn.setSize(100,50);
         inboxBtn.setLocation(500,150);
+        
+        searchBtn.setSize(100,50);
+        searchBtn.setLocation(500,200);
         
         
         name.setSize(300,20);
@@ -583,6 +589,7 @@ public class Display extends JFrame implements ActionListener, KeyListener, Wind
         frame.add(messageBtn);
         frame.add(friendsBtn);
         frame.add(inboxBtn);
+        frame.add(searchBtn);
         frame.add(name);
         frame.add(label_description);
         frame.add(label_age);
@@ -635,6 +642,24 @@ public class Display extends JFrame implements ActionListener, KeyListener, Wind
                 public void actionPerformed(ActionEvent arg0)
                 {   
                     messageScreen(user);
+                    frame.setVisible(false);
+                }
+            });
+            
+        searchBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                {   
+                    searchScreen(user);
+                    frame.setVisible(false);
+                }
+            });
+            
+        friendsBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                {   
+                    friendsScreen(user);
                     frame.setVisible(false);
                 }
             });
@@ -794,13 +819,10 @@ public class Display extends JFrame implements ActionListener, KeyListener, Wind
                     }
                     
                     if (send) {
-                        label_sent.setForeground(Color.BLUE);
-                        try{Thread.sleep(1000);}
-                        catch(InterruptedException ie){}
-                        messaged = true;
                         sentMessage = new Message(user.getName(),inputTo.getText(),inputMessage.getText());
                         profileScreen(user);
                         frame.setVisible(false);
+                        messaged = true;
                     }
                     else {
                         label_invalid.setForeground(Color.RED);
@@ -809,8 +831,242 @@ public class Display extends JFrame implements ActionListener, KeyListener, Wind
             });
     }
     
+    public void searchScreen(User user) {
+        JFrame frame = new JFrame();
+        
+        JButton searchBtn = new JButton("SEARCH");
+        JButton backBtn = new JButton("BACK");
+        JButton closeBtn = new JButton("CLOSE");
+        JButton followBtn = new JButton("FOLLOW A USER");
+        
+        JTextField inputName = new JTextField("",15);
+        
+        JLabel label_select = new JLabel("SELECT A USER");
+        
+        DefaultListModel<String> model = new DefaultListModel<>();
+        JList<String> usernames = new JList<String>(model);
+        
+        frame.getContentPane().setBackground(Color.WHITE);
+        frame.setLayout(null);
+        frame.pack();
+        frame.setSize(700,600);
+        frame.setTitle("Search");
+        
+        
+        searchBtn.setSize(100,50);
+        searchBtn.setLocation(300,200);
+        searchBtn.setForeground(Color.WHITE);
+        searchBtn.setBackground(Color.BLUE);
+        
+        backBtn.setSize(100,50);
+        backBtn.setLocation(50,50);
+        backBtn.setForeground(Color.WHITE);
+        backBtn.setBackground(Color.BLUE);
+        
+        closeBtn.setSize(100,50);
+        closeBtn.setLocation(50,100);
+        closeBtn.setForeground(Color.WHITE);
+        closeBtn.setBackground(Color.BLUE);
+        
+        followBtn.setSize(150,50);
+        followBtn.setLocation(500,50);
+        followBtn.setForeground(Color.WHITE);
+        followBtn.setBackground(Color.BLUE);
+        
+        usernames.setSize(200,300);
+        usernames.setLocation(300,250);
+        usernames.setForeground(Color.BLUE);
+        
+        label_select.setSize(200,50);
+        label_select.setLocation(500,100);
+        label_select.setForeground(Color.WHITE);
+        
+        frame.add(searchBtn);
+        frame.add(backBtn);
+        frame.add(closeBtn);
+        frame.add(followBtn);
+        frame.add(usernames);
+        frame.add(label_select);
+        
+        JPanel searchPanel = new JPanel();
+        
+        searchPanel.add(inputName);
+        
+        searchPanel.setSize(200,50);
+        searchPanel.setLocation(300,150);
+        searchPanel.setBackground(Color.WHITE);
+        
+        frame.add(searchPanel);
+        
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        frame.setVisible(true);
+        
+        
+        closeBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                {   
+                    finished = true;
+                    frame.setVisible(false);
+                }
+            });
+            
+        backBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                {   
+                    profileScreen(user);
+                    frame.setVisible(false);
+                }
+            });
+        
+        searchBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                {   
+                    model.clear();
+                    ArrayList<String> names = new ArrayList<String>();
+                    String sName = inputName.getText().toLowerCase();
+                    for (User u : users) {
+                        String uName = u.getName().toLowerCase();
+                        String userName = user.getName();
+                        if ((uName.equals(sName) || uName.indexOf(sName) != -1) && !uName.equals(userName)) {
+                            names.add(u.getName());
+                        }
+                    }
+                    for (int i = 0; i < names.size(); i++) {
+                        model.addElement(names.get(i));
+                    }
+                }
+            });
+        
+        followBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                { 
+                    label_select.setForeground(Color.WHITE);
+                    String friend = usernames.getSelectedValue();
+                    boolean notAlready = true;
+                    for (User u : user.getFriends()) {
+                        if (u.getName().equals(friend)) {
+                            notAlready = false;
+                        }
+                    }
+                    if (usernames.getSelectedIndex() != -1) {
+                        for (User u : users) {
+                            if (u.getName().equals(friend) && notAlready) {
+                                user.addFriend(u);
+                            }
+                        }
+                    }
+                    else {
+                        label_select.setForeground(Color.BLUE);
+                    }
+                }
+            });
+    }
     
-    
+    /***************************************************************************************/
+    public void friendsScreen(User user) {
+        JFrame frame = new JFrame();
+        
+        String[] friends = new String[user.countFriends()+1];
+        friends[0] = "FRIENDS:";
+        for (int i = 1; i < friends.length; i++) {
+            friends[i] = user.getFriends().get(i-1).getName();
+        }
+        
+        
+        JButton closeBtn = new JButton("CLOSE");
+        JButton backBtn = new JButton("BACK");
+        JButton unfriendBtn = new JButton("UNFRIEND USER");
+        
+        JList friendsList = new JList(friends);
+        
+        JLabel label_notSelect = new JLabel("NO USER SELECTED");
+        
+        
+        frame.getContentPane().setBackground(Color.WHITE);
+        frame.setLayout(null);
+        frame.pack();
+        frame.setSize(700,600);
+        frame.setTitle("Friends");
+        
+        
+        closeBtn.setSize(100,50);
+        closeBtn.setLocation(50,100);
+        closeBtn.setForeground(Color.WHITE);
+        closeBtn.setBackground(Color.BLUE);
+        
+        backBtn.setSize(100,50);
+        backBtn.setLocation(50,50);
+        backBtn.setForeground(Color.WHITE);
+        backBtn.setBackground(Color.BLUE);
+        
+        unfriendBtn.setSize(150,50);
+        unfriendBtn.setLocation(500,50);
+        unfriendBtn.setForeground(Color.WHITE);
+        unfriendBtn.setBackground(Color.BLUE);
+        
+        friendsList.setSize(200,500);
+        friendsList.setLocation(200,50);
+        friendsList.setForeground(Color.BLUE);
+        
+        label_notSelect.setSize(200,50);
+        label_notSelect.setLocation(500,100);
+        label_notSelect.setForeground(Color.WHITE);
+        
+        
+        frame.add(closeBtn);
+        frame.add(backBtn);
+        frame.add(friendsList);
+        frame.add(unfriendBtn);
+        frame.add(label_notSelect);
+        
+        //panel for JTextFields
+        
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        frame.setVisible(true);
+        
+        
+        
+        closeBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                {   
+                    finished = true;
+                    frame.setVisible(false);
+                }
+            });
+            
+        backBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                {   
+                    profileScreen(user);
+                    frame.setVisible(false);
+                }
+            });
+            
+        unfriendBtn.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                {  
+                    label_notSelect.setForeground(Color.WHITE);
+                    if (friendsList.getSelectedIndex() > 0) {
+                        String nonFriend = friends[friendsList.getSelectedIndex()];
+                        user.unfriend(nonFriend);
+                        friendsScreen(user);
+                        frame.setVisible(false);
+                    }
+                    else {
+                        label_notSelect.setForeground(Color.RED);
+                    }
+                }
+            });
+    }
     
     
     
@@ -865,6 +1121,34 @@ public class Display extends JFrame implements ActionListener, KeyListener, Wind
     public Message getSentMessage() {
         return sentMessage;
     }
+    public void resetMessage() {
+        messaged = false;
+    }
     
     
+    
+    
+    public void Screen() {
+        JFrame frame = new JFrame();
+        
+        //other elements
+        
+        frame.getContentPane().setBackground(Color.WHITE);
+        frame.setLayout(null);
+        frame.pack();
+        frame.setSize(700,600);
+        frame.setTitle("");
+        
+        //set size, color, and location of all objects
+        
+        //add objects to frame
+        
+        //panel for JTextFields
+        
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        frame.setVisible(true);
+        
+        //listener methods
+    }
 }
