@@ -15,6 +15,18 @@ public class User
     //CONSTRUCTOR - DONE FOR YOU
     //NOTE - it leaves the friendsList empty
     
+    public User(String n, String p, String  d, int a, String h, String[] s, ArrayList<User> friends) 
+    {
+        name = n;
+        password = p;
+        description = d;
+        age = a;
+        hometown = h;
+        schools = s;
+        friendsList = friends;
+        messages = new ArrayList<Message>();
+    }//END Constructor
+    
     public User(String n, String p, String  d, int a, String h, String[] s) 
     {
         name = n;
@@ -49,7 +61,7 @@ public class User
         //Need to include schools and friendslist
         retStr += "Schools: \t";
         for (int i = 0; i < schools.length; i++) {
-            if (!schools[i].equals("null")) {
+            if (!(schools[i] == null)) {
                 if (i != 0) {
                     retStr += ", ";
                 }
@@ -98,12 +110,14 @@ public class User
     }
     
     public void addFriend(User friend) {
-        friendsList.add(friend);
+        if (friend != null) {
+            friendsList.add(friend);
+        }
     }
     
     public void unfriend(String friend) {
         for (int i = 0; i < friendsList.size(); i++) {
-            if (friendsList.get(i).equals(friend)) {
+            if (friendsList.get(i).getName().equals(friend)) {
                 friendsList.remove(i);
             }
         }
@@ -130,8 +144,14 @@ public class User
         for (int i = 0; i < this.friendsList.size(); i++) {
             for (int j = 0; j < other.friendsList.size(); j++) {
                 if (this.friendsList.get(i).equals(other.friendsList.get(j))) {
-                    mutuals.add(other);
+                    mutuals.add(friendsList.get(i));
                 }
+            }
+        }
+        
+        for (int i = 0; i < mutuals.size(); i++) {
+            if (mutuals.get(i).equals(this) || mutuals.get(i).equals(other)) {
+                mutuals.remove(i);
             }
         }
         
@@ -157,9 +177,13 @@ public class User
         for (User x : friendsList) {
             mate = false;
             for (String y : x.schools) {
-                for(String z : this.schools) {
-                    if (y.equals(z)) {
-                        mate = true;
+                if (!(y == null)) {
+                    for(String z : this.schools) {
+                        if (!(z == null)) {
+                            if (y.equals(z)) {
+                                mate = true;
+                            }
+                        }
                     }
                 }
             }
@@ -183,21 +207,24 @@ public class User
             }
         }
         
-        if (pos.size() == 0) {
-            int randFriend = (int)(Math.random() * (this.friendsList.size() + 1));
-            int randFF = (int)(Math.random() * (friendsList.get(randFriend).friendsList.size() + 1));
-            return friendsList.get(randFriend).friendsList.get(randFF);
-        }
-        
         for (int i = 0; i < pos.size(); i++) {
-            for (User x : this.friendsList) {
-                if (pos.get(i).equals(x)) {
-                    pos.remove(i);
+            if (pos.get(i).equals(this)) {
+                pos.remove(i);
+            }
+            else {
+                for (User x : this.friendsList) {
+                    if (pos.get(i).equals(x)) {
+                        pos.remove(i);
+                    }
                 }
             }
         }
         
-        int randPos = (int)(Math.random() * (pos.size() + 1));
+        if (pos.size() == 0) {
+            return null;
+        }
+        
+        int randPos = (int)(Math.random() * pos.size());
         return pos.get(randPos);
     }
     
@@ -209,6 +236,11 @@ public class User
         line += age + ";";
         line += hometown + ";";
         line += schools[0] + "," + schools[1] + "," + schools[2] + ";";
+        line += name + ",";
+        for (User u : friendsList) {
+            line += u.getName() + ",";
+        }
+        line += ";";
         return line;
     }
     
