@@ -4,39 +4,20 @@ public class RamBook
 {
     //INSTANCE FIELD
     private ArrayList<User> allUsers;
-    private ArrayList<Administrator> admins;
     private ArrayList<Message> messages;
+    private ArrayList<String> friends;
 
     //CONSTRUCTOR
     public RamBook() throws Exception
     {
         allUsers = new ArrayList<User>();
-        admins = new ArrayList<Administrator>();
+        friends = new ArrayList<String>();
         
         messages = new ArrayList<Message>();
         
         readUsers();
-        admins.add(new Administrator("Ethan Hoffman", 1234));
         
-        //Randomly Generate Friends
-        for (int x=0; x < allUsers.size(); x++)
-        {
-            int friends = (int)(Math.random()*allUsers.size());
-            ArrayList<User> addList = new ArrayList<User>();
-            
-            
-            for (int i = 0; i < friends; i++)
-            {
-                User u = allUsers.get((int)(Math.random()*allUsers.size()));
-                if (!addList.contains(u) && !u.equals(allUsers.get(x)))
-                {    
-                    addList.add(u);
-                }
-            }
-            
-            allUsers.get(x).bulkAddFriends(addList);
-            
-        }
+        doFriends();
         
         
     }//END CONSTRUCTOR
@@ -88,6 +69,7 @@ public class RamBook
         schools[2] = x.substring(0,x.indexOf(";"));
         x = x.substring(x.indexOf(";") + 1);
         
+        friends.add(x);
         return new User(name,pw,desc,age,hometown,schools);
     }
     
@@ -144,4 +126,28 @@ public class RamBook
             }
         }
     }
+    
+    public void doFriends() {
+        for (User u : allUsers) {
+            for (String s : friends) {
+                if (s.substring(0,s.indexOf(",")).equals(u.getName())) {
+                    s = s.substring(s.indexOf(",") + 1);
+                    while (s.indexOf(";") > 0) {
+                        String name = s.substring(0,s.indexOf(","));
+                        for (User f : allUsers) {
+                            if (name.equals(f.getName())) {
+                                u.addFriend(f);
+                            }
+                        }
+                        s = s.substring(s.indexOf(",") + 1);
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    
+    
+    
 }//END CLASS
